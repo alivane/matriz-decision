@@ -1,6 +1,6 @@
 
 #Matriz Beneficio Main
-def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
+def matriz_beneficio(demanda, probabilidad, stock, venta, costo, venta_destemporada):
     matriz_principal = []
     matriz_valor_esperado = []
     matriz_beneficio = []
@@ -19,7 +19,7 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
         matriz_cond = []
         print('\n')
         for _stock in demanda:
-            cond_esp, esp, cond = calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index)
+            cond_esp, esp, cond = calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index, venta_destemporada)
 
             #Matriz cond con Valor Esperado
             matriz_cond_esp.append(cond_esp)
@@ -49,20 +49,29 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
 
 
 # Calcula el beneficio de la matriz
-def calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index):
+def calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index, venta_destemporada):
     cond = 0
     esp = probabilidad[index]
     cond_esp = []
 
     if _stock > _demanda:
-        cond = (venta * _demanda) - (costo * _stock)
-        
+
+        if venta_destemporada > 0:
+            cond = ((_stock - (_stock - _demanda)) * (venta - costo)) + ( ((_stock - _demanda) * venta_destemporada) - ((_stock - _demanda) * costo)  )
+            cond_str = ('((stock: %s - (stock: %s - demanda: %s)) * (venta: %s - costo: %s)) + ( ((stock: %s - demanda: %s) * venta_destemporada: %s) - ((stock: %s - demanda: %s) * costo: %s)  ) = %s' 
+            % (_stock, _stock, _demanda, venta, costo, _stock, _demanda, venta_destemporada, _stock, _demanda, costo, cond))
+
+        else:    
+            cond = (venta * _demanda) - (costo * _stock)
+            cond_str = 'Venta %s * Demanda %s - costo %s * Stock %s = %s' % (venta, _demanda, costo, _stock, cond)
+
         esp_str = 'Beneficio %s * Probabilidad %s'% (cond, esp)
         esp = cond * esp
         esp_str += ' = %s' % esp
-        cond_str = 'Venta %s * Demanda %s - costo %s * Stock %s = %s' % (venta, _demanda, costo, _stock, cond)
+        
     elif _stock <= _demanda:
         cond = (venta * _stock) - (costo * _stock)
+
         esp_str = 'Beneficio %s * Probabilidad %s'% (cond, esp)
         esp = cond * esp
         esp_str += ' = %s' % esp        
@@ -126,9 +135,17 @@ def calcula_valor_esperado(valor_esperado):
     print("\nEl Valor esperado es: %s y el stock es el %s \n" % (ultimo_valor, stock))
 
 
-demanda = [0, 1, 2, 3, 4, 5]
-probabilidad = [0.1, 0.1, 0.2, 0.3, 0.2, 0.1]
-stock = [0, 1, 2, 3, 4, 5]
-venta = 30
-costo = 20
-matriz_beneficio(demanda, probabilidad, stock, venta, costo)
+# demanda = [0, 1, 2, 3, 4, 5]
+# probabilidad = [0.1, 0.1, 0.2, 0.3, 0.2, 0.1]
+# stock = [0, 1, 2, 3, 4, 5]
+# venta = 30
+# costo = 20
+# venta_destemporada = 0
+
+demanda = [1000, 1500, 1700, 1900]
+probabilidad = [0.2, 0.4, 0.3, 0.1]
+stock = [1000, 1500, 1700, 1900]
+venta = 9
+costo = 6
+venta_destemporada = 5
+matriz_beneficio(demanda, probabilidad, stock, venta, costo, venta_destemporada)
