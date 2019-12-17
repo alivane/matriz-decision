@@ -1,9 +1,9 @@
 
-#Matriz Beneficio Main
-def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
+#Matriz Perdida Main
+def matriz_perdida(demanda, probabilidad, stock, venta, costo):
     matriz_principal = []
     matriz_valor_esperado = []
-    matriz_beneficio = []
+    matriz_perdida = []
     matriz_total_valor_esperado = []
 
     print("===================================================================")
@@ -19,7 +19,7 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
         matriz_cond = []
         print('\n')
         for _stock in demanda:
-            cond_esp, esp, cond = calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index)
+            cond_esp, esp, cond = calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index)
 
             #Matriz cond con Valor Esperado
             matriz_cond_esp.append(cond_esp)
@@ -27,7 +27,7 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
             #Matriz Valor esperado
             matriz_esp.append(esp)
 
-            #Matriz Cond (Beneficio)
+            #Matriz Cond (Perdida)
             matriz_cond.append(cond)
         print('\n')
             
@@ -35,12 +35,12 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
         index += 1
 
         matriz_principal.append(matriz_cond_esp)
-        matriz_beneficio.append(matriz_cond)
+        matriz_perdida.append(matriz_cond)
         matriz_valor_esperado.append(matriz_esp)
         
         # print(matriz_valor_esperado)
     print("===================================================================")
-    mostrar_matriz_beneficio(matriz_beneficio)
+    mostrar_matriz_perdida(matriz_perdida)
     print("===================================================================")
     mostrar_matriz_valor_esperado(matriz_valor_esperado)
     print("===================================================================")
@@ -48,37 +48,46 @@ def matriz_beneficio(demanda, probabilidad, stock, venta, costo):
     print("===================================================================")
 
 
-# Calcula el beneficio de la matriz
-def calculo_beneficio(_demanda, _stock, costo, venta, probabilidad, index):
+# Calcula el Perdida de la matriz
+def calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index):
     cond = 0
     esp = probabilidad[index]
     cond_esp = []
 
-    if _stock > _demanda:
-        cond = (venta * _demanda) - (costo * _stock)
+    if _stock == _demanda:
+        cond = 0
         
-        esp_str = 'Beneficio %s * Probabilidad %s'% (cond, esp)
+        esp_str = 'Perdida %s * Probabilidad %s'% (cond, esp)
         esp = cond * esp
         esp_str += ' = %s' % esp
-        cond_str = 'Venta %s * Demanda %s - costo %s * Stock %s = %s' % (venta, _demanda, costo, _stock, cond)
+        cond_str = 'Stock es igual a la Demanda = 0'
     elif _stock <= _demanda:
-        cond = (venta * _stock) - (costo * _stock)
-        esp_str = 'Beneficio %s * Probabilidad %s'% (cond, esp)
+        cond = (_demanda - _stock) * (venta - costo)
+
+        esp_str = 'Perdida %s * Probabilidad %s'% (cond, esp)
         esp = cond * esp
         esp_str += ' = %s' % esp        
-        cond_str = 'Venta %s * Stock %s - costo %s * Stock %s = %s' % (venta, _stock, costo, _stock, cond)
+        cond_str = '(Demanda: %s - Stock: %s) * (Venta: %s - Costo: %s) = %s' % (_demanda, _stock, venta, costo, cond)
+    else:
+        cond = (_stock - _demanda) * (costo)
+
+        esp_str = 'Perdida %s * Probabilidad %s'% (cond, esp)
+        esp = cond * esp
+        esp_str += ' = %s' % esp        
+        cond_str = '(Stock: %s - Demanda: %s) * Costo: %s = %s' % (_stock, _demanda, costo, cond)
+    
     
     print(cond_str)
     print(esp_str)
-    cond_esp.append(cond)
-    cond_esp.append(esp)
+    # cond_esp.append(cond)
+    # cond_esp.append(esp)
     return cond_esp, esp, cond
 
 
 
-#Muestra matriz beneficio
-def mostrar_matriz_beneficio(matriz_cond):
-    print('\n\nMatriz Beneficio\n')
+#Muestra matriz Perdida
+def mostrar_matriz_perdida(matriz_cond):
+    print('\n\nMatriz Perdida\n')
     for row in matriz_cond:
         str_column = ''
         for column in row:
@@ -114,12 +123,13 @@ def suma_valor_esperado(valor_esperado, total_valor_esperado):
     calcula_valor_esperado(total_valor_esperado)
 
 
+#Calcula el valor esperado
 def calcula_valor_esperado(valor_esperado):
-    ultimo_valor = 0
+    ultimo_valor = 1000000000000 #Valor de ejemplo
     stock = 0
     count_stock = 0
     for valor in valor_esperado:
-        if valor >= ultimo_valor:
+        if valor <= ultimo_valor:
             ultimo_valor = valor
             stock = count_stock
         count_stock += 1
@@ -131,4 +141,4 @@ probabilidad = [0.1, 0.1, 0.2, 0.3, 0.2, 0.1]
 stock = [0, 1, 2, 3, 4, 5]
 venta = 30
 costo = 20
-matriz_beneficio(demanda, probabilidad, stock, venta, costo)
+matriz_perdida(demanda, probabilidad, stock, venta, costo)
