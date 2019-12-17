@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 
 #Matriz Beneficio Main
 def matriz_beneficio(demanda, probabilidad, stock, venta, costo, venta_destemporada):
@@ -142,12 +144,20 @@ def calcula_valor_esperado(valor_esperado):
 # costo = 20
 # venta_destemporada = 0
 
-demanda = [1000, 1500, 1700, 1900]
-probabilidad = [0.2, 0.4, 0.3, 0.1]
-stock = [1000, 1500, 1700, 1900]
-venta = 9
-costo = 6
-venta_destemporada = 5
+# demanda = [1000, 1500, 1700, 1900]
+# probabilidad = [0.2, 0.4, 0.3, 0.1]
+# stock = [1000, 1500, 1700, 1900]
+# venta = 9
+# costo = 6
+# venta_destemporada = 5
+
+demanda = [0, 900, 1200, 2100, 2800, 3200]
+probabilidad = [0.0, 0.17, 0.39, 0.29, 0.15, 0.0]
+stock = [0, 900, 1200, 2100, 2800, 3200]
+venta = 15
+costo = 12
+venta_destemporada = 10
+
 matriz_beneficio(demanda, probabilidad, stock, venta, costo, venta_destemporada)
 
 # Para obtener el valor de la perfecta informacion se toma los valores 
