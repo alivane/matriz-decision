@@ -149,3 +149,10 @@ venta = 9
 costo = 6
 venta_destemporada = 5
 matriz_beneficio(demanda, probabilidad, stock, venta, costo, venta_destemporada)
+
+# Para obtener el valor de la perfecta informacion se toma los valores 
+# diagonales de la matriz beneficio, multiplicado por su probabilidad
+# y restado con el valor esperado de la matriz beneficion, Todo eso debería ser igual al resultado
+# esperado de la matriz de perdida
+# ejemplo
+# 3000(0,2)+4500(0,4)+5100(0,3)+5700(0,1)-4220 = 280

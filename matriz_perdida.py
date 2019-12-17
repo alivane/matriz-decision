@@ -1,6 +1,6 @@
 
 #Matriz Perdida Main
-def matriz_perdida(demanda, probabilidad, stock, venta, costo):
+def matriz_perdida(demanda, probabilidad, stock, venta, costo, venta_destemporada):
     matriz_principal = []
     matriz_valor_esperado = []
     matriz_perdida = []
@@ -19,7 +19,7 @@ def matriz_perdida(demanda, probabilidad, stock, venta, costo):
         matriz_cond = []
         print('\n')
         for _stock in demanda:
-            cond_esp, esp, cond = calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index)
+            cond_esp, esp, cond = calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index, venta_destemporada)
 
             #Matriz cond con Valor Esperado
             matriz_cond_esp.append(cond_esp)
@@ -49,7 +49,7 @@ def matriz_perdida(demanda, probabilidad, stock, venta, costo):
 
 
 # Calcula el Perdida de la matriz
-def calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index):
+def calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index, venta_destemporada):
     cond = 0
     esp = probabilidad[index]
     cond_esp = []
@@ -69,12 +69,16 @@ def calculo_perdida(_demanda, _stock, costo, venta, probabilidad, index):
         esp_str += ' = %s' % esp        
         cond_str = '(Demanda: %s - Stock: %s) * (Venta: %s - Costo: %s) = %s' % (_demanda, _stock, venta, costo, cond)
     else:
-        cond = (_stock - _demanda) * (costo)
+        if venta_destemporada > 0:
+            cond = (_stock - _demanda)
+            cond_str = '(Stock: %s - Demanda: %s) = %s' % (_stock, _demanda, cond)
+        else:
+            cond = (_stock - _demanda) * (costo)
+            cond_str = '(Stock: %s - Demanda: %s) * Costo: %s = %s' % (_stock, _demanda, costo, cond)
 
         esp_str = 'Perdida %s * Probabilidad %s'% (cond, esp)
         esp = cond * esp
         esp_str += ' = %s' % esp        
-        cond_str = '(Stock: %s - Demanda: %s) * Costo: %s = %s' % (_stock, _demanda, costo, cond)
     
     
     print(cond_str)
@@ -136,9 +140,21 @@ def calcula_valor_esperado(valor_esperado):
     print("\nEl Valor esperado es: %s y el stock es el %s \n" % (ultimo_valor, stock))
 
 
-demanda = [0, 1, 2, 3, 4, 5]
-probabilidad = [0.1, 0.1, 0.2, 0.3, 0.2, 0.1]
-stock = [0, 1, 2, 3, 4, 5]
-venta = 30
-costo = 20
-matriz_perdida(demanda, probabilidad, stock, venta, costo)
+def perfecta_información():
+    print("test")
+
+# demanda = [0, 1, 2, 3, 4, 5]
+# probabilidad = [0.1, 0.1, 0.2, 0.3, 0.2, 0.1]
+# stock = [0, 1, 2, 3, 4, 5]
+# venta = 30
+# costo = 20
+# venta_destemporada = 0
+
+demanda = [1000, 1500, 1700, 1900]
+probabilidad = [0.2, 0.4, 0.3, 0.1]
+stock = [1000, 1500, 1700, 1900]
+venta = 9
+costo = 6
+venta_destemporada = 5
+
+matriz_perdida(demanda, probabilidad, stock, venta, costo, venta_destemporada)
