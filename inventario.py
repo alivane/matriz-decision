@@ -40,7 +40,7 @@ def duracion_lote(q, lamb):
     result = float(q / lamb)
     print("\n======================================")
     print("%s / %s = %s" % (q, lamb, result))
-    print("La Duración del ciclo en días o la duración del lote es: %s " % result)
+    print("La Duración del ciclo en días o la duración del lote es: %s dias " % result)
     print("======================================\n")
     return result
 
@@ -74,6 +74,27 @@ def rop(lamb, lead_time, q):
     print("======================================\n")
     return result
 
+def rop_entrega(t, t_menor, lead_time, x, lamb, q):
+    if lead_time <= t_menor:
+        result = float(t - lead_time) * float(x-lamb)
+        print("\n======================================")
+        print(" (%s - %s) * (%s-%s) = %s" % (t, lead_time, x, lamb, result))
+        print("Ordenar %s Subiendo "
+            % (result))
+        print("======================================\n")
+    else:
+        print("Bajando")
+        result = rop(lamb, lead_time, q)
+    return result
+
+def calcular_lambda(q, inv_max, x, d):
+    result = float(x*d) - float(float(float(float(inv_max*x)/q))*d)
+    print("\n======================================")
+    print("(%s*%s) - ((%s/%s)*%s)*%s = %s" % (x, d, inv_max, q, x, d, result))
+    print("El nuevo lambda es %s "% (result))
+    print("======================================\n")
+    return result
+
 # No hay inventario de seguridad
 
 def inv_de_seguridad(q, rop, seguridad):
@@ -97,6 +118,21 @@ def eoq(lamb, k, h):
     print("======================================\n")
     return result
 
+def costo_anual_tendencia_o_almacenamiento_h(c, i):
+    result = float(c*i)
+    print("\n======================================")
+    print("%s* %s = %s" % (c, i, result))
+    print("El Costo de Almacenamiento Anual H es: $%s " % result)
+    print("======================================\n")
+    return result
+
+def costo_tendencia_diario_o_almacenamiento_h(h, dias_aaaa):
+    result = float(h/dias_aaaa)
+    print("\n======================================")
+    print("%s/ %s = %s" % (h, dias_aaaa, result))
+    print("El Costo de Almacenamiento Diario o Tendencia diaria Hd es: $%s " % result)
+    print("======================================\n")
+    return result
 
 def h_con_descuento(h, descuento):
     result = float(h * descuento)
@@ -167,7 +203,7 @@ def inventario_maximo(q, x, lamb):
     result = float(q * float( float(x-lamb)/x ))
     print("\n======================================")
     print("%s * ( (%s-%s)/%s ) = %s" % (q, x, lamb, x, result))
-    print("El inventario máximo con tasa de producción infinita es %s " % result)
+    print("El inventario máximo con tasa de producción infinita es %s unidades" % result)
     print("======================================\n")
     return result
 
@@ -189,6 +225,13 @@ def costo_anual_infinito(k, lamb, q, c, h, x):
     print("======================================\n")
     return result
 
+def costo_anual_infinito_diario(k, lamb, lamb_diario, q, c, h, x):
+    result = float(float( float(k*lamb)/q ) + c*lamb + h * float(q/2) * float( float(x-lamb_diario)/x ))
+    print("\n======================================")
+    print("( (%s*%s)/%s ) + %s*%s + %s * (%s/2) * ( (%s-%s)/%s ) = %s" % (k, lamb, q, c, lamb, h, q, x, lamb_diario, x, result))
+    print("El costo anual con tasa de producción infinita es %s " % result)
+    print("======================================\n")
+    return result
 
 def calcular_q_infinito(lamb, k, h, x, lamb_diario):
     result = float(math.sqrt(float(2*lamb*k)/h)) * float(math.sqrt(x/float(x-lamb_diario)))
@@ -206,105 +249,3 @@ def calcular_t(q, lamb):
     print("======================================\n")
     return result
 
-#Cantidad a ordenar
-# Tamaño de lote
-Q = 0 
-# Costo de arranque 
-# Costo fijo de orden
-K = 5.50
-# Costo unitario de compra
-# Costo unitario de producción
-C = 2.00
-# Costo unitario ANUAL de Almacenamiento
-H = 0.40
-# Duracion de un lote
-T = 0
-# Tasa anual
-lambda_ = 10000
-# Dias en el Año
-dias_por_aaaa = 250
-#Dias de retraso
-lead_time = 5
-#Inventario de seguridad en unidades
-inventario_de_seguridad = 300
-
-# Demanda determinística y constante
-
-print("\nDemanda determinística y constante")
-
-politica_optima_de_inventario = politica_optima(K, lambda_, H)
-
-costo_anual(K, lambda_, politica_optima_de_inventario, C, H)
-
-duracion_en_dias = demanda_diaria(lambda_, dias_por_aaaa)
-
-duracion_lote(politica_optima_de_inventario, duracion_en_dias) #o duracion del ciclo en dias
-
-orden(lambda_, politica_optima_de_inventario) #Ordenes anuales
-
-# ======================================
-
-#No hay demora en la entrega
-print("\nNo hay demora en la entrega")
-
-_rop_ = rop(duracion_en_dias, lead_time, politica_optima_de_inventario)
-
-# No hay inventario de seguridad
-print("\nNo hay inventario de segurida")
-
-inv_de_seguridad(politica_optima_de_inventario, _rop_, inventario_de_seguridad)
-
-# No hay descuentos por cantidad
-print("\nNo hay descuentos por cantidad")
-#Ejemplo
-_K_ = 8
-_lambda_ = 600 #unidades anuales
-_i_ = 0.20
-
-matriz_descuentos = [[[0, 499], 0.30], [[500, 999], 0.29], [[1000, 100000], 0.28]]
-
-# descuento = 0.28
-# calculo_h_con_descuento = h_con_descuento(_i_, descuento)
-# resultado_eoq = eoq(_lambda_, _K_, calculo_h_con_descuento)
-
-recorrer_matriz_descuentos(matriz_descuentos, _i_, _lambda_, _K_)
-
-
-print("\n• No se permiten atrasos")
-#Ejemplo 2
-# Cantidad a ordenar
-Q1 = 0
-# Costo unitario anual de almacenamiento
-__lambda__ = 10000
-H1 = 0.40
-K1 = 5.5
-_dias_por_aaaa = 250
-# Costo unitario anual de deuda
-P = 2.00
-# Duración de un lote
-TDuracion = 0
-# Intervalo de disponibilidad
-TDisponibilidad = 0
-# Intervalo de escasez
-TEscacez = 0
-
-print("Q - Y aproximar al mayor")
-politica_opt_inventario = calcular_q(K1, __lambda__, P, H1)
-calculo_de_y = calcular_y(K1, __lambda__, P, H1)
-ordenar_q_cuando_z(politica_opt_inventario, calculo_de_y)
-
-
-print("\n\n Tasa infinita de producción")
-X = 120 #unidades diarias DEMANDA DIARIA
-# costo_por_ciclo_infinito(K1, c, q, h, x, lamb, t)
-# costo_anual_infinito(k, lamb, q, c, h, x)
-
-lamb_diario = demanda_diaria(lambda_, dias_por_aaaa)
-
-politica_optima_infinita = calcular_q_infinito(__lambda__, K1, H1, X, lamb_diario)
-inventario_maximo(politica_optima_infinita, X, lamb_diario)
-
-print("Diario")
-calcular_t(politica_optima_infinita, lamb_diario)
-print("Anual")
-calcular_t(politica_optima_infinita, X)
