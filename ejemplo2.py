@@ -7,8 +7,8 @@ from inventario import *
 K = 30
 # Costo unitario de compra O Costo unitario de producción DOLARES
 C = 200
-# Costo unitario ANUAL de Almacenamiento DOLARES
-H = 0.40
+# # Costo unitario ANUAL de Almacenamiento DOLARES
+# H = 0.40
 # Tasa de demanda anual ENTERO
 lambda_ = 126000
 # Dias en el Año ENTERO

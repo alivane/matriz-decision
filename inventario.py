@@ -174,16 +174,17 @@ def calcular_q(k, lamb, p, h):
     result = float(math.sqrt(float(2*k*lamb) / h)) * float(math.sqrt(float(p+h)/p))
     print("\n======================================")
     print("Raíz((2*%s*%s) / %s) * Raíz((%s+%s)/%s) = %s" % (k, lamb, h, p, h, p, result))
-    print("Q Con la deuda es: %s " % result)
+    print("(Q) El tamaño óptimo Con la deuda es: %s " % result)
     print("======================================\n")
 
     return result
 
+#Inventario maximo
 def calcular_y(k, lamb, p, h):
     result = float(math.sqrt(float(2*k*lamb) / h)) * float(math.sqrt(p/float(p+h)))
     print("\n======================================")
     print("Raíz((2*%s*%s) / %s) * Raíz(%s/(%s+%s)) = %s" % (k, lamb, h, p, p, h, result))
-    print("Y Con la deuda es: %s " % result)
+    print("(Y) El inventario maximo Con la deuda es: %s " % result)
     print("======================================\n")
 
     return result
@@ -192,7 +193,7 @@ def ordenar_q_cuando_z(q, y):
     result = float(q - y)
     print("\n======================================")
     print("%s - %s = %s" % (q, y, result))
-    print("Ordenar %s cuando se deba %s " % (q, result))
+    print("(Z) Si no hay demora demora en la entrega Ordenar %s cuando se deba %s " % (q, result))
     print("======================================\n")
     return result
 
